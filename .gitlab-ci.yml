@@ -1,0 +1,22 @@
+variables:
+  USERHOST: "test@bxm.test3"
+  WEBHOME: "/home/test/deploy/ops/hdfkmanage-web"
+  BUILDHOME: "dist"
+  
+stages:
+  - build
+  - deploy
+
+build_job:
+  stage: build
+  script: 
+  - echo "git pull..."
+  allow_failure: false
+  when: manual
+   
+deploy_job:
+  stage: deploy
+  script: 
+  - ssh ${USERHOST} "mkdir -p ${WEBHOME} "
+  - scp -r ${PWD}/${BUILDHOME}/*  ${USERHOST}:${WEBHOME}
+  - ssh ${USERHOST} "ls -l ${WEBHOME} "
